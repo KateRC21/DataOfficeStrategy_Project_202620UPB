@@ -81,7 +81,7 @@ El notebook consulta la API pública en vivo. No requiere credenciales ni descar
 |---|---|
 | Luis Ángel Seoanes Ovieso | CDO / Arquitecto(a) de datos · Product Owner |
 | *Integrante 2* | Líder de Gobierno de Datos · Data Steward |
-| *Integrante 3* | Ingeniero(a) de Datos · Analista |
+| *Jhon Sebastian Rayo Posada* | Ingeniero(a) de Datos · Analista |
 
 ## Licencia de los datos
 
