@@ -1,0 +1,19 @@
+# Datos locales (contienen PII en claro en la zona raw: nunca se versionan)
+data/raw/*
+data/curated/*
+data/mart/*
+!data/**/.gitkeep
+
+# Python / Jupyter
+__pycache__/
+*.pyc
+.venv/
+.ipynb_checkpoints/
+
+# Enunciado del curso (no es parte del producto)
+Proyecto Final 20262S.pdf
+
+# SO / editores
+.DS_Store
+Thumbs.db
+.vscode/
