@@ -79,9 +79,10 @@ El notebook consulta la API pública en vivo. No requiere credenciales ni descar
 
 | Integrante | Rol en ORCA |
 |---|---|
-| Luis Ángel Seoanes Ovieso | CDO / Arquitecto(a) de datos · Product Owner |
-| *Integrante 2* | Líder de Gobierno de Datos · Data Steward |
-| *Jhon Sebastian Rayo Posada* | Ingeniero(a) de Datos · Analista |
+| Luis Ángel Seoanes Ovieso | CDO / Arquitecto de datos · Product Owner |
+| Julian Amariles Taborda | Líder de Gobierno de Datos · Data Steward |
+| Jhon Sebastian Rayo Posada | Ingeniero de Datos · Analista |
+| Katheryn Ramírez Chimá | Ingeniera de Datos · Analista |
 
 ## Licencia de los datos
 
