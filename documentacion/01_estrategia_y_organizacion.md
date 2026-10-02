@@ -258,8 +258,9 @@ La **estructura** es funcional e híbrida (quién responde por qué). La **ejecu
 | Integrante | Rol en ORCA | Entregables que lidera |
 |---|---|---|
 | Luis Ángel Seoanes Ovieso | CDO / Arquitecto(a) de datos · Product Owner | Estrategia, ArchiMate, integración y README |
-| *Integrante 2* | Líder de Gobierno de Datos · Data Steward | Plan de Gobierno, reglas de calidad, clasificación y RACI |
-| *Integrante 3* | Ingeniero(a) de Datos · Analista | Pipeline Python, EDA, automatización y dashboard |
+| Julian Amariles Taborda | Líder de Gobierno de Datos · Data Steward | Plan de Gobierno, reglas de calidad, clasificación y RACI |
+| Jhon Sebastian Rayo Posada | Ingeniero(a) de Datos · Analista | Pipeline Python, EDA, automatización y dashboard |
+| Katheryn Ramírez Chimá | Ingeniero(a) de Datos · Analista | Pipeline Python, EDA, automatización y dashboard |
 
 Los tres integrantes hacen commits en todos los componentes. Los roles indican quién lidera cada frente, no quién lo hace solo.
 
