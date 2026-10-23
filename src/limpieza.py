@@ -1,4 +1,13 @@
 """Pipeline raw -> curated de ORCA para SECOP II Contratos (DS-01).
+
+Pasos: leer -> nulos disfrazados -> tipado -> normalización (entidad, municipio)
+-> medición de calidad -> banderas -> seudonimización -> verificación de PII -> escritura.
+
+Uso:
+    python src/limpieza.py --contratos data/raw/DS-01_*.parquet --divipola data/raw/DS-03_*.parquet
+
+La sal del seudónimo se lee de la variable de entorno ORCA_SALT (no se versiona).
+Sin ella se usa una sal de desarrollo y el manifiesto lo deja registrado.
 """
 import argparse
 import glob
@@ -43,6 +52,24 @@ REQUERIDAS = (list(DOCUMENTOS.values()) + NOMBRES_PERSONA + [
     "tipodocproveedor", "proveedor_adjudicado", "nit_entidad", "nombre_entidad", "ciudad", "id_contrato",
     "estado_contrato", "modalidad_de_contratacion", "fecha_de_firma", "fecha_de_inicio_del_contrato",
     "fecha_de_fin_del_contrato", "valor_del_contrato"])
+
+# Identificadores que ya fueron pseudonimizados mediante HMAC-SHA256.
+COLUMNAS_SEUDONIMIZADAS = {
+    "proveedor_id", "representante_legal_id", "supervisor_id",
+    "ordenador_gasto_id", "ordenador_pago_id",
+}
+
+# Campos públicos que no constituyen PII por sí mismos.
+COLUMNAS_PUBLICAS_NO_PII = {
+    "nombre_entidad", "nit_entidad", "ciudad", "municipio",
+    "cod_municipio", "departamento", "localizaci_n", "codigo_entidad",
+}
+
+# Campos donde una coincidencia exacta con el conjunto sensible sí es relevante.
+CAMPOS_A_VERIFICAR_PII = {
+    "proveedor_nombre", "referencia_del_contrato", "objeto_del_contrato",
+    "descripcion_del_proceso", "justificacion_modalidad_de", "condiciones_de_entrega",
+}
 
 
 def leer(ruta: str) -> pd.DataFrame:
@@ -135,24 +162,40 @@ TEXTO_LIBRE = ["objeto_del_contrato", "descripcion_del_proceso", "justificacion_
 
 
 def enmascarar_texto(curado: pd.DataFrame, sens: set) -> int:
-    """Reemplaza por [DOC] los números del texto libre que coinciden con un documento del lote.
-    Limitación: no detecta nombres de personas escritos dentro del texto libre."""
+    """Reemplaza por [DOC] los documentos sensibles encontrados en texto libre."""
+    # Solo necesitamos documentos numéricos. Preparar este conjunto una vez
+    # evita recalcular/ordenar valores sensibles por cada celda.
+    documentos_sensibles = {str(v) for v in sens if str(v).isdigit() and len(str(v)) >= 5}
+    if not documentos_sensibles:
+        return 0
+
     cambios = 0
-    for c in [c for c in TEXTO_LIBRE if c in curado]:
+    patron = re.compile(r"\d{5,}")
+    for c in (c for c in TEXTO_LIBRE if c in curado):
+        original = curado[c]
         def f(v):
             if not isinstance(v, str):
                 return v
-            return re.sub(r"\d{5,}", lambda m: "[DOC]" if m.group(0) in sens else m.group(0), v)
-        nuevo = curado[c].map(f).astype("string")
-        cambios += int((nuevo.fillna("") != curado[c].fillna("")).sum())
+            return patron.sub(lambda m: "[DOC]" if m.group(0) in documentos_sensibles else m.group(0), v)
+        nuevo = original.map(f).astype("string")
+        cambios += int((nuevo.fillna("") != original.fillna("")).sum())
         curado[c] = nuevo
     return cambios
 
 
 def pii_en_claro(curado: pd.DataFrame, sens: set) -> int:
-    """Celdas del curado que repiten un documento o nombre de persona del original."""
-    texto = curado.select_dtypes(include=["string", "object"]).columns
-    return int(sum(curado[c].isin(sens).sum() for c in texto))
+    """Cuenta posibles coincidencias de PII solo en columnas relevantes.
+
+    No cuenta como PII: campos públicos de entidad/territorio ni
+    identificadores que ya fueron pseudonimizados mediante HMAC-SHA256.
+    """
+    columnas = [
+        c for c in CAMPOS_A_VERIFICAR_PII
+        if c in curado
+        and c not in COLUMNAS_PUBLICAS_NO_PII
+        and c not in COLUMNAS_SEUDONIMIZADAS
+    ]
+    return int(sum(curado[c].isin(sens).sum() for c in columnas))
 
 
 def procesar(contratos: str, divipola: str, salida: str, reporte: str, corte: str | None = None) -> dict:

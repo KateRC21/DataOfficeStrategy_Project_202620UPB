@@ -1,0 +1,15 @@
+dimension,regla,descripcion,evaluados,cumplen,fallan,cumplimiento_pct
+Completitud,C1,fecha_de_firma presente,291719,291719,0,100.0
+Completitud,C2,valor_del_contrato presente,291719,291719,0,100.0
+Completitud,C3,documento_proveedor presente,291719,291165,554,99.81
+Completitud,C4,ciudad definida (no 'No Definido'),291719,272024,19695,93.25
+Completitud,C5,modalidad_de_contratacion presente,291719,291657,62,99.98
+Validez,V1,valor_del_contrato no negativo,291719,291719,0,100.0
+Validez,V2,fecha_de_firma no es futura,291719,291719,0,100.0
+Validez,V3,ciudad reconocida en DIVIPOLA,272024,271395,629,99.77
+Exactitud,E1,valor_del_contrato mayor que cero,291719,288910,2809,99.04
+Exactitud,E2,valor_del_contrato sin atípico (<= $100.000 millones),291719,291672,47,99.98
+Consistencia,K1,fecha de fin no anterior a la de inicio,289125,289040,85,99.97
+Consistencia,K2,fecha de firma no posterior al fin del contrato,291717,291455,262,99.91
+Unicidad,U1,id_contrato único,291719,291719,0,100.0
+Oportunidad,O1,última firma dentro de 7 días del corte,1,1,0,100.0
