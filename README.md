@@ -85,7 +85,7 @@ dashboard/eda/
 - **95 columnas de origen**
 - **76 columnas en curated**
 - **0 duplicados eliminados**
-- **32.758 nombres de entidad unificados**
+- **33.945 nombres de entidad unificados**
 - **24 celdas de texto libre enmascaradas**
 - NIT estandarizado a **9 dígitos**
 - Calidad del lote: **99,66 %**

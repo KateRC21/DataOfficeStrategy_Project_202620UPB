@@ -1,10 +1,11 @@
 """Pipeline raw -> curated de ORCA para SECOP II Contratos (DS-01).
 
-Pasos: leer -> nulos disfrazados -> tipado -> normalización (entidad, municipio)
--> medición de calidad -> banderas -> seudonimización -> verificación de PII -> escritura.
+Pasos: leer -> nulos disfrazados -> tipado -> NIT de entidad a 9 dígitos
+-> normalización (entidad, municipio) -> medición de calidad -> banderas
+-> seudonimización -> enmascaramiento de PII -> escritura.
 
 Uso:
-    python src/limpieza.py --contratos data/raw/DS-01_*.parquet --divipola data/raw/DS-03_*.parquet
+    python notebooks/limpieza.py --contratos data/raw/DS-01_*.parquet --divipola data/raw/DS-03_*.parquet
 
 La sal del seudónimo se lee de la variable de entorno ORCA_SALT (no se versiona).
 Sin ella se usa una sal de desarrollo y el manifiesto lo deja registrado.
@@ -103,6 +104,17 @@ def tipar(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def nit_9_digitos(serie: pd.Series) -> pd.Series:
+    """Deja el NIT de entidad en 9 dígitos, sin dígito de verificación.
+
+    Nueve dígitos se conservan. Diez o más pierden el último. Menos de nueve
+    quedan nulos: no hay un dígito de verificación que retirar. El resultado
+    sigue siendo texto para no perder ceros a la izquierda.
+    """
+    s = serie.astype("string").str.replace(r"\D", "", regex=True)
+    return s.where(s.str.len() == 9, s.where(s.str.len() >= 10).str[:-1])
+
+
 def normalizar_entidad(df: pd.DataFrame) -> tuple[pd.DataFrame, int]:
     limpio = df["nombre_entidad"].str.replace(r"[*/]+\s*$", "", regex=True).str.replace(r"\s+", " ", regex=True).str.strip()
     tmp = pd.DataFrame({"nit": df["nit_entidad"], "n": limpio}).dropna()
@@ -183,6 +195,20 @@ def enmascarar_texto(curado: pd.DataFrame, sens: set) -> int:
     return cambios
 
 
+def retirar_coincidencias_exactas(curado: pd.DataFrame, sens: set) -> int:
+    """Sustituye por [PII] la celda cuyo valor completo está en el conjunto sensible."""
+    cambios = 0
+    for c in CAMPOS_A_VERIFICAR_PII:
+        if c not in curado:
+            continue
+        mask = curado[c].isin(sens)
+        n = int(mask.sum())
+        if n:
+            curado.loc[mask, c] = "[PII]"
+        cambios += n
+    return cambios
+
+
 def pii_en_claro(curado: pd.DataFrame, sens: set) -> int:
     """Cuenta posibles coincidencias de PII solo en columnas relevantes.
 
@@ -208,6 +234,11 @@ def procesar(contratos: str, divipola: str, salida: str, reporte: str, corte: st
         if col not in crudo:
             crudo[col] = pd.NA
     df = tipar(a_nulos(crudo))
+    nit_digitos = df["nit_entidad"].astype("string").str.replace(r"\D", "", regex=True)
+    tenia_nit = df["nit_entidad"].notna()
+    df["nit_entidad"] = nit_9_digitos(df["nit_entidad"])
+    nit_recortados = int((tenia_nit & nit_digitos.str.len().ge(10) & df["nit_entidad"].notna()).sum())
+    nit_no_estandarizables = int((tenia_nit & df["nit_entidad"].isna()).sum())
     df, unificados = normalizar_entidad(df)
     df = asignar_municipio(df, a_nulos(leer(divipola)))
 
@@ -227,6 +258,7 @@ def procesar(contratos: str, divipola: str, salida: str, reporte: str, corte: st
     cur = cur.drop(columns=[c for c in ELIMINAR if c in cur] + vacias)
     sens = conjunto_sensible(df)
     textos_enmascarados = enmascarar_texto(cur, sens)
+    celdas_pii = retirar_coincidencias_exactas(cur, sens)
     pii = pii_en_claro(cur, sens)
 
     salida, reporte = Path(salida), Path(reporte)
@@ -240,8 +272,11 @@ def procesar(contratos: str, divipola: str, salida: str, reporte: str, corte: st
         "columnas_origen": crudo.shape[1], "columnas_curated": cur.shape[1],
         "inicio_utc": inicio.isoformat(timespec="seconds"), "fin_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "corte": str(corte_ts.date()), "calidad": resumen, "duplicados_eliminados": duplicados,
-        "nombres_de_entidad_unificados": unificados, "columnas_eliminadas_pii_o_sin_finalidad": [c for c in ELIMINAR if c in crudo],
-        "columnas_eliminadas_por_vacias": vacias, "celdas_de_texto_libre_enmascaradas": textos_enmascarados, "pii_en_claro_en_curated": pii,
+        "nombres_de_entidad_unificados": unificados, "nit_entidad_recortados_a_9": nit_recortados,
+        "nit_entidad_no_estandarizables": nit_no_estandarizables,
+        "columnas_eliminadas_pii_o_sin_finalidad": [c for c in ELIMINAR if c in crudo],
+        "columnas_eliminadas_por_vacias": vacias, "celdas_de_texto_libre_enmascaradas": textos_enmascarados,
+        "celdas_pii_reemplazadas": celdas_pii, "pii_en_claro_en_curated": pii,
         "sal": "ORCA_SALT (entorno)" if sal_txt else "desarrollo (no usar en producción)",
         "sha256_curated": hashlib.sha256(ruta.read_bytes()).hexdigest(),
         "clasificacion": "Interno (PII seudonimizada con HMAC-SHA256)"}
@@ -259,4 +294,6 @@ if __name__ == "__main__":
     a = ap.parse_args()
     m = procesar(a.contratos, a.divipola, a.salida, a.reporte, a.corte)
     print(json.dumps({k: m[k] for k in ("origen_filas", "filas_curated", "columnas_origen", "columnas_curated",
-          "duplicados_eliminados", "nombres_de_entidad_unificados", "celdas_de_texto_libre_enmascaradas", "pii_en_claro_en_curated", "calidad")}, ensure_ascii=False, indent=2))
+          "duplicados_eliminados", "nombres_de_entidad_unificados", "nit_entidad_recortados_a_9",
+          "nit_entidad_no_estandarizables", "celdas_de_texto_libre_enmascaradas", "celdas_pii_reemplazadas",
+          "pii_en_claro_en_curated", "calidad")}, ensure_ascii=False, indent=2))

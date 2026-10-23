@@ -3,7 +3,7 @@
 Solo consulta agregados por la API (no descarga datos ni toca PII).
 Imprime una tabla en Markdown y agrega una fila a automatizacion/registro_ejecuciones.csv.
 
-Uso:  python src/monitoreo_fuente.py
+Uso:  python notebooks/monitoreo_fuente.py
 """
 import csv
 from datetime import datetime, timezone

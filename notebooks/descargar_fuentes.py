@@ -1,8 +1,8 @@
 """Descarga las fuentes de ORCA desde la API SODA de datos.gov.co a la zona raw.
 
 Uso:
-    python src/descargar_fuentes.py            # descarga DS-01, DS-02 y DS-03
-    python src/descargar_fuentes.py DS-01      # solo una fuente
+    python notebooks/descargar_fuentes.py            # descarga DS-01, DS-02 y DS-03
+    python notebooks/descargar_fuentes.py DS-01      # solo una fuente
 
 Salida (no versionada, contiene PII en claro):
     data/raw/<codigo>_<dataset>_<AAAAMMDD>.parquet

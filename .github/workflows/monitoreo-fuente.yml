@@ -15,7 +15,7 @@ jobs:
           python-version: "3.12"
       - run: pip install requests
       - name: Consultar la fuente y mostrar el resumen
-        run: python src/monitoreo_fuente.py | tee -a "$GITHUB_STEP_SUMMARY"
+        run: python notebooks/monitoreo_fuente.py | tee -a "$GITHUB_STEP_SUMMARY"
       - name: Guardar el registro de la ejecución
         uses: actions/upload-artifact@v4
         with:

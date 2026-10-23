@@ -9,7 +9,7 @@ Validez,V2,fecha_de_firma no es futura,291719,291719,0,100.0
 Validez,V3,ciudad reconocida en DIVIPOLA,272024,271395,629,99.77
 Exactitud,E1,valor_del_contrato mayor que cero,291719,288910,2809,99.04
 Exactitud,E2,valor_del_contrato sin atípico (<= $100.000 millones),291719,291672,47,99.98
-Consistencia,K1,fecha de fin no anterior a la de inicio,289125,289040,85,99.97
-Consistencia,K2,fecha de firma no posterior al fin del contrato,291717,291455,262,99.91
+Consistencia,K1,fecha de fin no anterior a la de inicio,289126,289041,85,99.97
+Consistencia,K2,fecha de firma no posterior al fin del contrato,291718,291456,262,99.91
 Unicidad,U1,id_contrato único,291719,291719,0,100.0
 Oportunidad,O1,última firma dentro de 7 días del corte,1,1,0,100.0
