@@ -1,0 +1,12 @@
+﻿dimension,id,descripcion,evaluados,cumplen,fallan,cumplimiento_pct
+Consistencia,K1,fecha de fin no anterior a la de inicio,289126,289041,85,99.9706
+Consistencia,K2,fecha de firma no posterior al fin,291718,291456,262,99.9102
+Consistencia,K3,fecha de inicio no anterior a la firma,289126,289115,11,99.9962
+Consistencia,K4,persona natural sin NIT ni nombre de organización,236967,236967,0,100.0
+Consistencia,B1,es_contratacion_directa coincide con la modalidad,291657,291657,0,100.0
+Consistencia,B2,flag_valor_cero coincide con valor igual a 0,291719,291719,0,100.0
+Consistencia,B3,flag_valor_atipico coincide con valor mayor a 100.000 millones,291719,291719,0,100.0
+Consistencia,B4,flag_fechas_inconsistentes coincide con fin anterior al inicio,291719,291719,0,100.0
+Consistencia,B5,flag_sin_fecha_firma coincide con firma nula,291719,291719,0,100.0
+Unicidad,U1,id_contrato sin filas repetidas,291719,291719,0,100.0
+Oportunidad,O1,última firma (2026-10-20) dentro de los 7 días anteriores al corte,1,1,0,100.0
