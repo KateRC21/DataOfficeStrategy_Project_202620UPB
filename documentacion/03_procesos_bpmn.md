@@ -99,9 +99,21 @@ Aislar la plataforma en su propio carril deja ver de un vistazo que **la mayor p
 
 **Frontera manual / automático.** Se automatiza lo **determinista, repetible y sin juicio de valor**: extraer, registrar el linaje, medir la calidad, seudonimizar, calcular el score, publicar y notificar. Queda humano lo que exige **criterio o rendición de cuentas**: liberar un lote defectuoso, decidir si una alerta es pertinente y elegir la actuación fiscal. **La máquina mide, la persona decide.**
 
-**Candidatos para la automatización de la entrega 2** (criterio 3 de la rúbrica):
-1. Ingesta programada (script de Python + Programador de tareas de Windows o GitHub Actions): tareas M1 y T1.
-2. Notificación de alertas por correo con Power Automate, leyendo el data mart: tarea M5 "Notificar alertas".
+### 3.1 Del modelo a la implementación (entrega final)
+
+Cada tarea automatizada del TO-BE quedó implementada y con evidencia. La tabla muestra la correspondencia, para que el BPMN no sea solo un dibujo:
+
+| Elemento del BPMN TO-BE | Implementación | Evidencia |
+|---|---|---|
+| Temporizador diario 02:00 | Programador de tareas de Windows ([`programar_tarea_windows.ps1`](../automatizacion/programar_tarea_windows.ps1)) | Tarea `ORCA-Pipeline-Diario` |
+| Extraer lote (tarea de servicio) + error adjunto con *backoff* | [`descargar_fuentes.py`](../notebooks/descargar_fuentes.py): 5 reintentos con espera; la tarea programada reintenta 3 veces cada hora | Manifiesto `data/raw/*.manifest.json` |
+| AND: registrar linaje ∥ validar calidad | Manifiestos con SHA-256 + [`calidad.py`](../notebooks/calidad.py) (14 reglas, 6 dimensiones) | `documentacion/calidad/reporte_calidad_DS-01.csv` |
+| Quality gate (XOR ≥ 95 %) → cuarentena (F4) | [`orquestar_pipeline.py`](../notebooks/orquestar_pipeline.py) detiene la publicación si el gate no da PUBLICAR | `automatizacion/registro_pipeline.csv` (columna `decision_gate`) |
+| Seudonimizar PII y aplicar clasificación | [`limpieza.py`](../notebooks/limpieza.py): HMAC-SHA256 y enmascarado en texto libre | `pii_en_claro_en_curated = 0` en el manifiesto |
+| Calcular banderas rojas y score (regla de negocio, reglas versionadas) | [`riesgo.py`](../notebooks/riesgo.py) + [`reglas_riesgo.json`](../notebooks/reglas_riesgo.json) | `data/mart/mart.manifest.json` |
+| Publicar el data mart y refrescar el dashboard | Mart en Parquet + [`dashboard/app.py`](../dashboard/app.py) | Capturas en `dashboard/img/` |
+| Notificar alertas (tarea de envío) | [`notificar_alertas.py`](../notebooks/notificar_alertas.py) + flujo de Power Automate | `automatizacion/alertas/` |
+| Analizar alerta con SLA P3D · registrar si es pertinente (M6) | Bandeja del dashboard + lista de SharePoint del flujo | Diseño en [`automatizacion/README.md`](../automatizacion/README.md) |
 
 ## 4. Notación utilizada
 

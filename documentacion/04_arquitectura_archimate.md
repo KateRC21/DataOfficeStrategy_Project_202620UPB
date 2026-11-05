@@ -1,11 +1,11 @@
-# 04 · Arquitectura de la solución (ArchiMate) · Boceto
+# 04 · Arquitectura de la solución (ArchiMate) · v1.0
 
 | | |
 |---|---|
-| **Modelo** | [`archimate/ORCA-Arquitectura-v0.1.archimate`](archimate/ORCA-Arquitectura-v0.1.archimate) (formato nativo de **Archi**) |
-| **Versión** | v0.1, boceto de la Entrega 1 · 28-sep-2026 |
-| **Contenido** | 77 elementos · 95 relaciones · 3 vistas |
-| **Validación** | Todas las relaciones se verificaron contra la tabla oficial de relaciones permitidas de Archi 5.10 (ArchiMate 3.2). Las imágenes se exportaron con Archi. |
+| **Modelo** | [`archimate/ORCA-Arquitectura-v1.0.archimate`](archimate/ORCA-Arquitectura-v1.0.archimate) (formato nativo de **Archi**). El boceto de la Entrega 1 se conserva en [`ORCA-Arquitectura-v0.1.archimate`](archimate/ORCA-Arquitectura-v0.1.archimate) |
+| **Versión** | v1.0, entrega final · 13-nov-2026 (v0.1: boceto de la Entrega 1, 28-sep-2026) |
+| **Contenido** | 92 elementos · 123 relaciones · 4 vistas (v0.1: 77 · 95 · 3) |
+| **Validación** | Las relaciones de v0.1 se verificaron contra la tabla de relaciones permitidas de Archi 5.10 (ArchiMate 3.2) y sus imágenes se exportaron con Archi. Las 28 relaciones nuevas de v1.0 usan solo *serving, realization, access, assignment, composition y flow* entre tipos permitidos. La vista 04 se genera con [`actualizar_modelo_v1.py`](archimate/actualizar_modelo_v1.py), que también la renderiza a PNG |
 | **Criterio de rúbrica** | 4. Arquitectura de datos: modelo de las 3 capas coherente y justificado (10 %) |
 
 ---
@@ -62,13 +62,38 @@ Esta vista es el primer boceto del **linaje** exigido por el gobierno de datos (
 | AD-5 | **Local + GitHub**, sin nube | AWS/Azure/GCP | La nube es opcional en el curso y no agrega valor para un volumen de ≈ 300 mil filas. La arquitectura queda preparada: las zonas se mapean 1:1 a un lago de datos en la nube si se escala. |
 | AD-6 | **Notificador en Power Automate** | Correo desde Python | Es la herramienta de automatización vista en el curso y lo que usaría una entidad pública con Microsoft 365 |
 
-## Pendiente para las siguientes entregas
+## Vista 04 · Despliegue final, seguridad y control de acceso (nueva en v1.0)
 
-- **Entrega 2:** vista de linaje a nivel de campo, vista de seguridad y control de acceso (quién accede a cada zona) y un artefacto real por cada zona.
-- **Entrega final:** vista de despliegue definitiva y alineación con el dashboard implementado.
+![Vista de despliegue y acceso](img/archimate-04-despliegue-acceso.png)
+
+Esta vista cierra lo que el boceto dejó pendiente: **dónde corre cada pieza**, **qué clasificación tiene cada zona** y **qué rol accede a cuál**.
+
+- **Negocio:** los seis roles del Plan de Gobierno (Owner, Steward, custodio, analista, auditor y ciudadanía). Los actores de la vista 01 (Contralor Auxiliar, Data Steward, Equipo Auditor) se *asignan* a estos roles.
+- **Aplicación:** el servicio *Control de acceso por rol y capa* lo realiza *Políticas como código* ([`notebooks/gobierno.py`](../notebooks/gobierno.py)) y sirve a los seis roles. Lee las tres zonas de datos (*access* de lectura), cada una con su clasificación en el nombre: raw **Confidencial**, curated **Interno** y mart **Confidencial (alertas reservadas)**. El mismo componente sirve al dashboard: filtra las pestañas por rol. El *Orquestador* hace fluir el mart publicado hacia el dashboard y las alertas hacia el notificador.
+- **Tecnología:** el *Equipo de analítica ORCA* (Windows · Python 3.13) aloja los artefactos reales de cada zona, las reglas versionadas `reglas_riesgo.json` y el registro de corridas. Su *Programador de tareas* dispara el orquestador a las 02:00. GitHub contiene GitHub Actions (monitoreo diario). El servidor Streamlit sirve el dashboard.
+
+## Cambios de v0.1 a v1.0 (alineación con lo implementado)
+
+| Elemento del boceto | En v1.0 | Por qué |
+|---|---|---|
+| Pipeline ORCA (Python · notebooks) | Pipeline ORCA (`descargar_fuentes.py` · `limpieza.py`) | El componente ya existe y tiene nombre de archivo |
+| Motor de calidad de datos | `calidad.py` · 6 dimensiones · gate 95 % | Implementado y medido por lote |
+| Motor de reglas de riesgo | `riesgo.py` · 9 banderas + `reglas_riesgo.json` v1.0.0 | AD-4 implementada: reglas versionadas fuera del código |
+| Servicio de BI (Power BI / Streamlit) | Servidor Streamlit | Se eligió Streamlit: es Python como el resto del pipeline, se versiona en el mismo repositorio y el control de acceso por rol se programa con las mismas políticas (Power BI exigiría licencias Pro para compartir y duplicaría las reglas en DAX) |
+| Artefactos `raw/…`, `curated/…`, `mart/…` | Rutas reales de `data/` | Trazabilidad directa del modelo al repositorio |
+| — | Orquestador, Políticas como código, roles, zonas clasificadas, registro de corridas | Vista 04 |
+
+## Coherencia entre las tres capas
+
+| Proceso de negocio (BPMN TO-BE) | Servicio de aplicación | Componente implementado | Tecnología |
+|---|---|---|---|
+| Monitorear la contratación | Ingesta incremental · Validación de calidad · Seudonimización · Scoring | `orquestar_pipeline.py` → `descargar_fuentes.py`, `limpieza.py`, `calidad.py`, `riesgo.py` | Programador de tareas 02:00 · Python 3.13 · Parquet |
+| Analizar y validar alertas | Visualización y alertas | `dashboard/app.py` · `notificar_alertas.py` | Streamlit · Power Automate |
+| Gobernar los datos | Catálogo y linaje · Control de acceso | `gobierno.py` · manifiestos · `04_gobierno_datos.ipynb` | GitHub (versionado) · GitHub Actions |
+| Programar la actuación fiscal | — (decisión humana) | Bandeja exportada a CSV | — |
 
 ## Cómo abrir el modelo
 
 1. Descargar **Archi** (gratuito): <https://www.archimatetool.com/download/>
-2. *File → Open* → `documentacion/archimate/ORCA-Arquitectura-v0.1.archimate`
-3. Las 3 vistas están en la carpeta *Views*. Cada elemento tiene documentación en la pestaña *Properties*.
+2. *File → Open* → `documentacion/archimate/ORCA-Arquitectura-v1.0.archimate`
+3. Las 4 vistas están en la carpeta *Views*. Cada elemento tiene documentación en la pestaña *Properties*.
