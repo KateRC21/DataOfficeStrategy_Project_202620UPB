@@ -5,7 +5,7 @@ Ingesta, transformación, calidad, análisis exploratorio y automatización.
 
 |                      |                                                                                                                          |
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| **Solución**         | ORCA · corte de evidencia 23-oct-2026                                                                                    |
+| **Solución**         | ORCA · cortes de evidencia 23-oct-2026 (§1–7) y 5-nov-2026 (§8)                                                                                  |
 | **Carpeta revisada** | `[notebooks/](../notebooks/)`                                                                                            |
 | **Capas**            | `data/raw` → `data/curated` → `dashboard/eda`                                                                            |
 | **Este documento**   | Describe lo que el código hace hoy. Donde un notebook, el README o un workflow dicen otra cosa, se señala la diferencia. |
@@ -488,3 +488,80 @@ El monitoreo diario no dispara limpieza, calidad ni EDA. Si la fuente crece o ca
 
 
 El linaje reproducible es: nueva descarga con `notebooks/descargar_fuentes.py`, nuevo `procesar`, nuevo puntaje, nuevo manifiesto y un EDA que solo lee curated.
+---
+
+## 8. Entrega final (13-nov-2026): zona mart, orquestación y cierre de brechas
+
+Las dos brechas que quedaban abiertas en la tabla anterior («DS-02 integrado al análisis de competencia» y «zona `mart` y tablero de priorización») quedaron cerradas. El lote de evidencia final es el del **5-nov-2026**.
+
+### 8.1 Mapa actualizado
+
+```text
+orquestar_pipeline.py  (Programador de tareas 02:00 · registro en automatizacion/registro_pipeline.csv)
+   │
+   ├─ 1. descargar_fuentes.py ──► data/raw/DS-0X_*_20261105.parquet + manifest
+   ├─ 2. limpieza.py + calidad.py ──► data/curated/ + quality gate (si CUARENTENA, se detiene)
+   ├─ 3. riesgo.py + reglas_riesgo.json ──► data/mart/ (4 tablas + mart.manifest.json)
+   │        └─ usa DS-02 (solo id_del_portafolio, respuestas, oferentes únicos: sin PII)
+   ├─ 4. notificar_alertas.py ──► automatizacion/alertas/ (CSV + HTML) ──► Power Automate
+   └─ 5. gobierno.lotes_a_purgar() ──► retención de raw (3 lotes / 90 días)
+
+dashboard/app.py ──► lee solo data/mart (control de acceso por rol con gobierno.py)
+04_gobierno_datos.ipynb ──► verifica catálogo, diccionario, RACI, políticas, calidad, linaje, clasificación y acceso
+```
+
+| Archivo nuevo | Etapa | Qué hace |
+|---|---|---|
+| [`riesgo.py`](../notebooks/riesgo.py) | curated → mart | 9 banderas rojas, score 0–100, nivel, tablas de entidades, pares y serie mensual. Verifica el gate antes y la PII y la nomenclatura después |
+| [`reglas_riesgo.json`](../notebooks/reglas_riesgo.json) | Configuración | Pesos y umbrales versionados (v1.0.0) |
+| [`gobierno.py`](../notebooks/gobierno.py) | Gobierno | Matriz de acceso, clasificación, nomenclatura, retención y diccionario del mart |
+| [`notificar_alertas.py`](../notebooks/notificar_alertas.py) | Alertas | Bandeja de riesgo alto y cuerpo del correo |
+| [`orquestar_pipeline.py`](../notebooks/orquestar_pipeline.py) | Automatización | Corrida completa con registro |
+| [`03_riesgo_y_mart.ipynb`](../notebooks/03_riesgo_y_mart.ipynb) | Análisis | Ejecuta el motor y responde P1–P6 |
+| [`04_gobierno_datos.ipynb`](../notebooks/04_gobierno_datos.ipynb) | Gobierno | Demuestra los 8 artefactos sobre el lote |
+
+### 8.2 Las 9 banderas rojas (reglas v1.0.0)
+
+| Código | Bandera | Pregunta | Peso | Contratos (5-nov) |
+|---|---|---|---:|---:|
+| R1 | Contratación directa | P1 | 10 | 248.578 (84,4 %) |
+| R2 | Firma directa en ventana atípica (antes de la Ley de Garantías; fin de vigencia) | P2 | 15 | 47.352 |
+| R3 | Concentración entidad–proveedor | P3 | 15 | 2.993 |
+| R4 | Persona natural con contratos vigentes en ≥ 3 entidades el mismo mes | P4 | 10 | 4.389 |
+| R5 | Valor atípico para su tipo × modalidad (IQR en escala log) | P5 | 15 | 4.294 |
+| R6 | Proceso competitivo con un único oferente (cruce con DS-02) | P6 | 15 | 16.276 |
+| R7 | Urgencia manifiesta | P1 | 10 | 362 |
+| R8 | Prórroga ≥ 60 días y ≥ 50 % del plazo | P5 | 5 | 2.658 |
+| R9 | Valor $0 sin causal de valor cero o fechas inconsistentes | Calidad | 5 | 2.433 |
+
+**Score** = Σ (peso × bandera) / 100 × 100. **Niveles:** Alto ≥ 40 · Medio ≥ 25 · Bajo > 0. R1 sola (10 puntos) no basta para ser Medio: la contratación directa es la regla en Antioquia, así que solo prioriza cuando se combina con otra señal.
+
+| Nivel | Contratos | % | Valor |
+|---|---:|---:|---:|
+| Alto | 2.262 | 0,77 % | $10,2 billones |
+| Medio | 55.385 | 18,81 % | $19,4 billones |
+| Bajo | 204.432 | 69,44 % | $19,1 billones |
+| Sin señales | 32.330 | 10,98 % | $9,7 billones |
+
+**Bandeja del auditor** (riesgo Alto en sujetos de vigilancia del orden territorial): **1.948 contratos, el 1,05 % del universo territorial (185.337), por $9,2 billones.** Es lo que hace viable revisar con la misma planta de auditores: en lugar de muestrear 185 mil contratos, se empieza por 1.948 con la razón explícita de cada uno (códigos de banderas). Las combinaciones más frecuentes son R1+R2+R5 (644: directa, antes de la Ley de Garantías y de valor atípico) y R1+R3+R6 (602).
+
+### 8.3 Respuestas a P1–P6 con el lote final
+
+| # | Resultado |
+|---|---|
+| P1 | 12 entidades territoriales subieron ≥ 10 puntos porcentuales su contratación directa en 2026 frente a 2024–2025 (con ≥ 30 contratos en ambos periodos). Encabeza el Municipio de Zaragoza: de 32 % a 75 % |
+| P2 | 47.352 contratos directos firmados en ventana atípica, 45.885 de ellos en enero de 2026 (antes de la restricción de la Ley de Garantías del 31-ene) |
+| P3 | 116 pares entidad–proveedor con concentración; en el más extremo, un proveedor recibe el 87 % del valor de la entidad |
+| P4 | 523 contratistas persona natural (por seudónimo) con contratos vigentes en 3 a 13 entidades a la vez |
+| P5 | 4.294 contratos atípicos para su grupo; el mayor supera 38 veces el límite de su grupo |
+| P6 | 16.276 contratos de procesos competitivos con una sola oferta ($18 billones), sobre todo de mínima cuantía |
+
+### 8.4 Estado de los criterios de cierre
+
+| Criterio | Estado |
+|---|---|
+| DS-02 integrado al análisis de competencia | **Cumplido**: 99,13 % de los contratos cruza con su proceso (bandera R6) |
+| Zona `mart` y tablero de priorización | **Cumplido**: 4 tablas con manifiesto + `dashboard/app.py` |
+| Inconsistencias de fechas etiquetadas | Cumplido en el mart (R9) |
+| PII en claro en capas de consumo | **0** en curated y en mart (control que bloquea la publicación) |
+| Pipeline de punta a punta sin intervención | Cumplido: `orquestar_pipeline.py` (≈ 95 s sin descarga), 2 corridas registradas |
