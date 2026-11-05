@@ -1,0 +1,19 @@
+﻿,Owner (Luis),Steward (Julian),Custodio (Katheryn),Analista (Jhon)
+Alcance y preguntas P1–P6,A/R,C,C,C
+Políticas y estándares,A,R,C,C
+Asignar Owner/Steward,A,R,C,I
+Catálogo,I,A/R,R,C
+Diccionario,I,A/R,C,C
+Linaje por lote,I,C,A/R,I
+Cambios de esquema,I,A,R,C
+Reglas y umbrales de calidad,A,R,C,C
+Medir calidad por lote,I,A,R,I
+Reportar problemas de calidad,I,A,I,R
+Resolver incidentes de calidad,I,A,R,C
+Clasificar PII,A,R,C,I
+Seudonimización y sal,A,C,R,I
+Aprobar accesos,A,C,R,I
+Operar la ingesta,I,I,A/R,I
+Banderas y score de riesgo,A,C,C,R
+Publicar en el dashboard,A,C,I,R
+KPI de gobierno,I,A/R,C,I

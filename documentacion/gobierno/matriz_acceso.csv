@@ -1,0 +1,7 @@
+﻿,raw,curated,mart,dashboard_publico,justificacion
+data_owner,L,L,L,L,Responde por el dato y aprueba accesos; lee raw solo para resolver disputas sobre un lote.
+data_steward,L,L,L,L,Mide la calidad y resuelve incidentes: necesita ver el dato original para diagnosticar.
+custodio,E,E,E,E,Opera el pipeline: es el único rol que escribe en las capas (segregación de funciones).
+analista,-,L,L,L,Construye banderas y dashboard sobre datos seudonimizados; nunca necesita la cédula.
+auditor,-,-,L,L,Usa las alertas priorizadas; la evidencia la consulta en SECOP con el enlace del contrato.
+ciudadania,-,-,-,L,Transparencia: ve agregados; las alertas individuales son reservadas (no son hallazgos).

@@ -1,0 +1,96 @@
+﻿columna_fuente,tipo_dato,clasificacion_raw,tratamiento
+nombre_entidad,No personal,Público,conservada
+nit_entidad,No personal,Público,conservada
+departamento,No personal,Público,conservada
+ciudad,No personal,Público,conservada
+localizaci_n,No personal,Público,conservada
+orden,No personal,Público,conservada
+sector,No personal,Público,conservada
+rama,No personal,Público,conservada
+entidad_centralizada,No personal,Público,conservada
+proceso_de_compra,No personal,Público,conservada
+id_contrato,No personal,Público,conservada
+referencia_del_contrato,No personal,Público,conservada
+estado_contrato,No personal,Público,conservada
+codigo_de_categoria_principal,No personal,Público,conservada
+descripcion_del_proceso,Texto libre (puede contener PII),Interno,documentos personales enmascarados como [DOC]
+tipo_de_contrato,No personal,Público,conservada
+modalidad_de_contratacion,No personal,Público,conservada
+justificacion_modalidad_de,Texto libre (puede contener PII),Interno,documentos personales enmascarados como [DOC]
+fecha_de_firma,No personal,Público,conservada
+fecha_de_inicio_del_contrato,No personal,Público,conservada
+fecha_de_fin_del_contrato,No personal,Público,conservada
+condiciones_de_entrega,Texto libre (puede contener PII),Interno,documentos personales enmascarados como [DOC]
+tipodocproveedor,Determina PII,Interno,resumida en proveedor_es_persona_natural
+documento_proveedor,PII directa (documento),Confidencial,seudonimizada → proveedor_id (HMAC-SHA256) y eliminada
+proveedor_adjudicado,PII directa (nombre),Confidencial,eliminada (proveedor jurídico se conserva como proveedor_nombre)
+es_grupo,No personal,Público,conservada
+es_pyme,No personal,Público,conservada
+habilita_pago_adelantado,No personal,Público,conservada
+liquidaci_n,No personal,Público,conservada
+obligaci_n_ambiental,No personal,Público,conservada
+obligaciones_postconsumo,No personal,Público,conservada
+reversion,No personal,Público,conservada
+origen_de_los_recursos,No personal,Público,conservada
+destino_gasto,No personal,Público,conservada
+valor_del_contrato,No personal,Público,conservada
+valor_de_pago_adelantado,No personal,Público,conservada
+valor_facturado,No personal,Público,conservada
+valor_pendiente_de_pago,No personal,Público,conservada
+valor_pagado,No personal,Público,conservada
+valor_amortizado,No personal,Público,conservada
+valor_pendiente_de,No personal,Público,conservada
+valor_pendiente_de_ejecucion,No personal,Público,conservada
+saldo_cdp,No personal,Público,conservada
+saldo_vigencia,No personal,Público,conservada
+espostconflicto,No personal,Público,conservada
+dias_adicionados,No personal,Público,conservada
+puntos_del_acuerdo,No personal,Público,eliminada por vacía (≥ 99 % nulos) o sin uso
+pilares_del_acuerdo,No personal,Público,eliminada por vacía (≥ 99 % nulos) o sin uso
+urlproceso,No personal,Público,conservada
+nombre_representante_legal,PII directa (nombre),Confidencial,eliminada (proveedor jurídico se conserva como proveedor_nombre)
+nacionalidad_representante_legal,PII indirecta,Confidencial,eliminada
+domicilio_representante_legal,PII indirecta,Confidencial,eliminada
+tipo_de_identificaci_n_representante_legal,PII indirecta,Confidencial,eliminada
+identificaci_n_representante_legal,PII directa (documento),Confidencial,seudonimizada → representante_legal_id (HMAC-SHA256) y eliminada
+g_nero_representante_legal,PII indirecta,Confidencial,eliminada
+presupuesto_general_de_la_nacion_pgn,No personal,Público,conservada
+sistema_general_de_participaciones,No personal,Público,conservada
+sistema_general_de_regal_as,No personal,Público,conservada
+recursos_propios_alcald_as_gobernaciones_y_resguardos_ind_genas_,No personal,Público,conservada
+recursos_de_credito,No personal,Público,conservada
+recursos_propios,No personal,Público,conservada
+ultima_actualizacion,No personal,Público,conservada
+codigo_entidad,No personal,Público,conservada
+codigo_proveedor,No personal,Público,eliminada por vacía (≥ 99 % nulos) o sin uso
+objeto_del_contrato,Texto libre (puede contener PII),Interno,documentos personales enmascarados como [DOC]
+duraci_n_del_contrato,No personal,Público,conservada
+nombre_del_banco,Dato financiero personal,Confidencial,eliminada: sin finalidad legítima
+tipo_de_cuenta,Dato financiero personal,Confidencial,eliminada: sin finalidad legítima
+n_mero_de_cuenta,Dato financiero personal,Confidencial,eliminada: sin finalidad legítima
+el_contrato_puede_ser_prorrogado,No personal,Público,conservada
+nombre_ordenador_del_gasto,PII directa (nombre),Confidencial,eliminada (proveedor jurídico se conserva como proveedor_nombre)
+tipo_de_documento_ordenador_del_gasto,PII indirecta,Confidencial,eliminada
+n_mero_de_documento_ordenador_del_gasto,PII directa (documento),Confidencial,seudonimizada → ordenador_gasto_id (HMAC-SHA256) y eliminada
+nombre_supervisor,PII directa (nombre),Confidencial,eliminada (proveedor jurídico se conserva como proveedor_nombre)
+tipo_de_documento_supervisor,PII indirecta,Confidencial,eliminada
+n_mero_de_documento_supervisor,PII directa (documento),Confidencial,seudonimizada → supervisor_id (HMAC-SHA256) y eliminada
+nombre_ordenador_de_pago,PII directa (nombre),Confidencial,eliminada (proveedor jurídico se conserva como proveedor_nombre)
+tipo_de_documento_ordenador_de_pago,PII indirecta,Confidencial,eliminada
+n_mero_de_documento_ordenador_de_pago,PII directa (documento),Confidencial,seudonimizada → ordenador_pago_id (HMAC-SHA256) y eliminada
+documentos_tipo,No personal,Público,conservada
+descripcion_documentos_tipo,No personal,Público,eliminada por vacía (≥ 99 % nulos) o sin uso
+direcci_n_de_ejecuci_n_del_contrato,PII indirecta,Confidencial,eliminada
+criterios_de_sostenibilidad_ambiental,No personal,Público,conservada
+requisitos_ambientales_en_las_especificaciones_t_cnicas,No personal,Público,eliminada por vacía (≥ 99 % nulos) o sin uso
+criterios_ambientales_en_la_evaluaci_n_de_las_ofertas,No personal,Público,eliminada por vacía (≥ 99 % nulos) o sin uso
+obligaciones_contractuales_o_poscontractuales_a_nivel_ambiental,No personal,Público,eliminada por vacía (≥ 99 % nulos) o sin uso
+uso_de_etiquetado_ecol_gico,No personal,Público,eliminada por vacía (≥ 99 % nulos) o sin uso
+obligaciones_posconsumo,No personal,Público,conservada
+fecha_inicio_liquidacion,No personal,Público,conservada
+fecha_fin_liquidacion,No personal,Público,conservada
+fecha_de_notificaci_n_de_prorrogaci_n,No personal,Público,conservada
+fecha_inicio_reversi_n,No personal,Público,eliminada por vacía (≥ 99 % nulos) o sin uso
+fecha_fin_reversi_n,No personal,Público,eliminada por vacía (≥ 99 % nulos) o sin uso
+fecha_inicio_obligaciones_posconsumo,No personal,Público,eliminada por vacía (≥ 99 % nulos) o sin uso
+fecha_fin_obligaciones_posconsumo,No personal,Público,eliminada por vacía (≥ 99 % nulos) o sin uso

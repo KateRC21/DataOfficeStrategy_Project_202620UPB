@@ -1,0 +1,40 @@
+﻿columna,descripcion,tipo,unidad,valores_validos,dominio_observado,pct_nulos,pct_cumple_validos,sensibilidad,origen,transformacion
+id_contrato,Identificador único del contrato en SECOP II.,string,texto,patrón CO1.PCCNTR.<dígitos>; único,"294,409 valores distintos",0.0,100.0,Público,DS-01.id_contrato,sin cambio
+id_proceso_compra,Proceso de compra (portafolio) que originó el contrato; llave hacia DS-02.,string,texto,patrón CO1.BDOS.<dígitos>,"284,576 valores distintos",0.0,,Público,DS-01.proceso_de_compra,sin cambio
+nom_entidad,Nombre canónico de la entidad contratante (un nombre por NIT).,string,texto,no vacío,416 valores distintos,0.0,,Público,DS-01.nombre_entidad,quita * y / finales; nombre más frecuente por NIT
+id_nit_entidad,NIT de la entidad sin dígito de verificación.,string,texto de 9 dígitos,^[0-9]{9}$,416 valores distintos,0.0,100.0,Público,DS-01.nit_entidad,deja 9 dígitos (retira el DV)
+cod_orden_entidad,Orden administrativo de la entidad.,string,categoría,Territorial · Nacional · Corporación Autónoma,3 valores distintos,0.0,,Público,DS-01.orden,sin cambio
+nom_municipio,Municipio de la entidad según DIVIPOLA.,string,categoría,125 municipios de Antioquia o 'Sin municipio',118 valores distintos,0.0,,Público,DS-01.ciudad + DS-03.nom_mpio,"normaliza tildes, alias y cruza con DIVIPOLA"
+cod_municipio,Código DIVIPOLA del municipio.,string,texto de 5 dígitos,^05[0-9]{3}$,117 valores distintos,6.97,100.0,Público,DS-03.cod_mpio,cruce por nombre normalizado
+cod_modalidad,Modalidad de contratación.,string,categoría,lista de SECOP II (13 valores),13 valores distintos,0.02,,Público,DS-01.modalidad_de_contratacion,nulos disfrazados -> nulo
+cod_tipo_contrato,Tipo de contrato.,string,categoría,lista de SECOP II,20 valores distintos,0.0,,Público,DS-01.tipo_de_contrato,nulos disfrazados -> nulo
+cod_causal_modalidad,Causal que justifica la modalidad.,string,categoría,lista de SECOP II,35 valores distintos,0.01,,Público,DS-01.justificacion_modalidad_de,nulos disfrazados -> nulo
+cod_estado_contrato,Estado del contrato en el corte.,string,categoría,7 estados (capitalizados),7 valores distintos,0.0,,Público,DS-01.estado_contrato,capitaliza
+fec_firma,Fecha de firma del contrato.,datetime64[ns],fecha AAAA-MM-DD,≥ 2024-01-01 y ≤ fecha de corte,2024-01-01 10:07:44.495000 … 2026-11-03 12:21:35.461000,0.0,,Público,DS-01.fecha_de_firma,ISO 8601 -> fecha
+fec_inicio,Fecha de inicio de ejecución.,datetime64[ns],fecha,≥ fecha de firma (regla K3),2017-10-19 08:00:00 … 2035-11-07 16:00:00,0.94,,Público,DS-01.fecha_de_inicio_del_contrato,ISO 8601 -> fecha
+fec_fin,Fecha de terminación pactada.,datetime64[ns],fecha,≥ fecha de inicio (regla K1),2012-01-31 23:59:00 … 2065-01-31 12:00:00,0.0,,Público,DS-01.fecha_de_fin_del_contrato,ISO 8601 -> fecha
+val_contrato,Valor del contrato.,float64,COP corrientes,≥ 0,0.0 … 1159397606948.0,0.0,100.0,Público,DS-01.valor_del_contrato,texto -> número
+cant_dias_adicionados,Días de prórroga adicionados.,Float64,días,0 a 3.650,0.0 … 730546.0,0.0,99.997,Público,DS-01.dias_adicionados,texto -> número
+ind_persona_natural,El contratista es persona natural (documento distinto de NIT).,boolean,booleano,True/False,"True 238,782 · False 55,627",0.0,,Público (determina qué es PII),DS-01.tipodocproveedor,tipo != NIT
+id_proveedor_seud,"Seudónimo del contratista: HMAC-SHA256 con sal secreta, 16 hex.",string,texto hex,^[0-9a-f]{16}$,"83,382 valores distintos",0.19,100.0,Interno (seudónimo),DS-01.documento_proveedor,"HMAC-SHA256(sal, documento) — irreversible sin la sal"
+id_nit_proveedor,"NIT del contratista, solo si es persona jurídica.",string,texto,nulo si persona natural,"10,448 valores distintos",81.15,,Público (persona jurídica),DS-01.documento_proveedor,se conserva solo cuando tipo = NIT
+nom_proveedor_juridico,"Razón social del contratista, solo si es persona jurídica.",string,texto,nulo si persona natural,"10,562 valores distintos",81.12,,Público (persona jurídica),DS-01.proveedor_adjudicado,se conserva solo cuando tipo = NIT
+cant_respuestas_proceso,Respuestas (ofertas) que recibió el proceso.,Int64,conteo,≥ 0; nulo si el proceso no está en DS-02,0 … 180,0.87,,Público,DS-02.respuestas_al_procedimiento,máximo por id_del_portafolio
+cant_entidades_simultaneas,Máximo de entidades distintas con contratos vigentes del mismo contratista en un mes de este contrato.,int64,conteo,≥ 0,0 … 13,0.0,,Interno (derivado de seudónimo),DS-01 (fechas + seudónimo),regla R4
+val_limite_atipico_grupo,"Límite Q3 + 1,5·IQR (escala log) de su grupo tipo × modalidad.",float64,COP,> 0; nulo si el grupo tiene < 30 contratos,1.0 … 5.902720920351112e+21,0.08,,Público,derivado,regla R5
+ind_sujeto_vigilancia,La entidad es del orden territorial (alcance de la contraloría territorial).,boolean,booleano,True/False,"True 185,337 · False 109,072",0.0,,Público,DS-01.orden,orden = Territorial
+txt_objeto,"Objeto del contrato (primeros 300 caracteres), con documentos personales enmascarados como [DOC].",string,texto,sin documentos de personas naturales,"160,265 valores distintos",0.13,,Interno,DS-01.objeto_del_contrato,enmascarado de PII en texto libre
+url_proceso_secop,Enlace público al proceso en SECOP II (trazabilidad hasta el documento original).,string,URL,empieza por https://community.secop.gov.co,"283,938 valores distintos",0.0,100.0,Público,DS-01.urlproceso,extrae la URL del objeto JSON
+ind_r1_contratacion_directa,Bandera R1 (P1).,bool,booleano,True/False,"True 248,578 · False 45,831",0.0,,Confidencial (alerta),DS-01.modalidad_de_contratacion,reglas_riesgo.json R1
+ind_r2_ventana_atipica,Bandera R2 (P2).,bool,booleano,True/False,"True 47,352 · False 247,057",0.0,,Confidencial (alerta),DS-01.fecha_de_firma + modalidad,reglas_riesgo.json R2
+ind_r3_concentracion_par,Bandera R3 (P3).,bool,booleano,True/False,"True 2,993 · False 291,416",0.0,,Confidencial (alerta),"DS-01 (entidad, seudónimo, valor)",reglas_riesgo.json R3
+ind_r4_simultaneidad_pn,Bandera R4 (P4).,bool,booleano,True/False,"True 4,389 · False 290,020",0.0,,Confidencial (alerta),"DS-01 (seudónimo, fechas)",reglas_riesgo.json R4
+ind_r5_valor_atipico,Bandera R5 (P5).,bool,booleano,True/False,"True 4,294 · False 290,115",0.0,,Confidencial (alerta),DS-01.valor_del_contrato,reglas_riesgo.json R5
+ind_r6_unico_oferente,Bandera R6 (P6).,bool,booleano,True/False,"True 16,276 · False 278,133",0.0,,Confidencial (alerta),DS-02.respuestas_al_procedimiento,reglas_riesgo.json R6
+ind_r7_urgencia_manifiesta,Bandera R7.,bool,booleano,True/False,"True 362 · False 294,047",0.0,,Confidencial (alerta),DS-01.justificacion_modalidad_de,reglas_riesgo.json R7
+ind_r8_prorroga_desproporcionada,Bandera R8.,bool,booleano,True/False,"True 2,658 · False 291,751",0.0,,Confidencial (alerta),DS-01.dias_adicionados + fechas,reglas_riesgo.json R8
+ind_r9_inconsistencia_dato,Bandera R9 (calidad).,bool,booleano,True/False,"True 2,433 · False 291,976",0.0,,Confidencial (alerta),"DS-01 (valor, causal, fechas)",reglas_riesgo.json R9
+num_score_riesgo,"Score de riesgo: suma de pesos de las banderas activas, normalizada a 100.",float64,puntos 0–100,0 a 100,0.0 … 60.0,0.0,100.0,Confidencial (alerta),derivado,Σ peso·bandera / Σ pesos × 100
+niv_riesgo,Nivel de prioridad.,object,ordinal,Alto (≥ 40) · Medio (≥ 25) · Bajo (> 0) · Sin señales,4 valores distintos,0.0,100.0,Confidencial (alerta),derivado,umbrales de reglas_riesgo.json
+cant_banderas,Número de banderas activas.,int64,conteo,0 a 9,0 … 5,0.0,100.0,Confidencial (alerta),derivado,suma de ind_r*
+txt_banderas,"Códigos de las banderas activas (p. ej. R1,R3).",object,texto,subconjunto de R1…R9,86 valores distintos,0.0,,Confidencial (alerta),derivado,concatenación

@@ -1,0 +1,8 @@
+﻿dimension,regla,descripcion,evaluados,cumplen,cumplimiento_pct
+Completitud,M-C1,todo contrato tiene score y nivel,294409,294409,100.0
+Validez,M-V1,score entre 0 y 100,294409,294409,100.0
+Exactitud,M-E1,score = suma ponderada de banderas (recalculado),294409,294409,100.0
+Consistencia,M-K1,contratos del mart = filas de curated,1,1,100.0
+Consistencia,M-K2,suma de contratos por entidad = total,1,1,100.0
+Unicidad,M-U1,id_contrato único en el mart,294409,294409,100.0
+Oportunidad,M-O1,mart generado ≤ 24 h después del lote raw,1,1,100.0

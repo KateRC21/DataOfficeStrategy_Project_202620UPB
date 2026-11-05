@@ -1,0 +1,302 @@
+{
+  "dataset": "jbjy-vk9h",
+  "alcance": "departamento = 'Antioquia' AND fecha_de_firma >= '2024-01-01T00:00:00'",
+  "consultado": "2026-10-19T21:20:28+00:00",
+  "total_registros": 291406,
+  "reglas": {
+    "fin_antes_de_inicio": 85,
+    "inicio_antes_de_firma": 10,
+    "valor_mayor_100_mil_millones": 47,
+    "nit_con_menos_de_9_digitos": 650,
+    "firma_futura": 0
+  },
+  "columnas": {
+    "id_contrato": {
+      "tipo_perfil": "id",
+      "vacios": 0,
+      "nulos_disfrazados": 0,
+      "distintos": 291406,
+      "valores_repetidos": 0,
+      "pct_vacios": 0.0,
+      "pct_nulos_disfrazados": 0.0
+    },
+    "proceso_de_compra": {
+      "tipo_perfil": "id",
+      "vacios": 0,
+      "nulos_disfrazados": 0,
+      "distintos": 281650,
+      "valores_repetidos": 1782,
+      "pct_vacios": 0.0,
+      "pct_nulos_disfrazados": 0.0
+    },
+    "nombre_entidad": {
+      "tipo_perfil": "texto",
+      "vacios": 0,
+      "nulos_disfrazados": 0,
+      "distintos": 567,
+      "pct_vacios": 0.0,
+      "pct_nulos_disfrazados": 0.0
+    },
+    "nit_entidad": {
+      "tipo_perfil": "num",
+      "vacios": 0,
+      "distintos": 446,
+      "min": "800003935",
+      "max": "9020055758",
+      "ceros": 0,
+      "negativos": 0,
+      "pct_vacios": 0.0
+    },
+    "ciudad": {
+      "tipo_perfil": "cat",
+      "vacios": 0,
+      "nulos_disfrazados": 19670,
+      "distintos": 119,
+      "frecuencias": {
+        "Medellín": 133814,
+        "No Definido": 19670,
+        "Envigado": 11368,
+        "Bello": 10225,
+        "Sabaneta": 9050,
+        "Rionegro": 6749,
+        "La Estrella": 5604,
+        "Apartadó": 5201,
+        "Caldas": 3516,
+        "Itagui": 3497,
+        "Guarne": 3301,
+        "La Ceja": 2796,
+        "Caucasia": 2751,
+        "Retiro": 2564,
+        "Copacabana": 2528,
+        "El Santuario": 2436,
+        "Peñol": 2391,
+        "Marinilla": 2269,
+        "Girardota": 2156,
+        "Guatape": 2069,
+        "Barbosa": 1793,
+        "Sonson": 1735,
+        "Santa Rosa De Osos": 1626,
+        "Yarumal": 1582,
+        "El Bagre": 1490
+      },
+      "pct_vacios": 0.0,
+      "pct_nulos_disfrazados": 6.75
+    },
+    "orden": {
+      "tipo_perfil": "cat",
+      "vacios": 0,
+      "nulos_disfrazados": 0,
+      "distintos": 3,
+      "frecuencias": {
+        "Territorial": 183202,
+        "Nacional": 106081,
+        "Corporación Autónoma": 2123
+      },
+      "pct_vacios": 0.0,
+      "pct_nulos_disfrazados": 0.0
+    },
+    "estado_contrato": {
+      "tipo_perfil": "cat",
+      "vacios": 0,
+      "nulos_disfrazados": 0,
+      "distintos": 7,
+      "frecuencias": {
+        "En ejecución": 126813,
+        "Cerrado": 69600,
+        "Modificado": 50165,
+        "terminado": 40930,
+        "Aprobado": 2640,
+        "cedido": 756,
+        "Suspendido": 502
+      },
+      "pct_vacios": 0.0,
+      "pct_nulos_disfrazados": 0.0
+    },
+    "tipo_de_contrato": {
+      "tipo_perfil": "cat",
+      "vacios": 0,
+      "nulos_disfrazados": 5,
+      "distintos": 21,
+      "frecuencias": {
+        "Prestación de servicios": 246854,
+        "Otro": 16551,
+        "Suministros": 9384,
+        "Decreto 092 de 2017": 7458,
+        "Arrendamiento de inmuebles": 3216,
+        "Compraventa": 2979,
+        "Obra": 2907,
+        "Comodato": 692,
+        "Seguros": 488,
+        "Consultoría": 270,
+        "Interventoría": 226,
+        "Arrendamiento de muebles": 180,
+        "Servicios financieros": 64,
+        "Operaciones de Crédito Público": 49,
+        "No Especificado": 41,
+        "Asociación Público Privada": 15,
+        "Negocio fiduciario": 9,
+        "Venta muebles": 7,
+        "Concesión": 7,
+        "No Definido": 5,
+        "Venta inmuebles": 4
+      },
+      "pct_vacios": 0.0,
+      "pct_nulos_disfrazados": 0.0
+    },
+    "modalidad_de_contratacion": {
+      "tipo_perfil": "cat",
+      "vacios": 0,
+      "nulos_disfrazados": 62,
+      "distintos": 14,
+      "frecuencias": {
+        "Contratación directa": 240305,
+        "Contratación régimen especial": 20942,
+        "Mínima cuantía": 15761,
+        "Contratación Directa (con ofertas)": 5973,
+        "Contratación régimen especial (con ofertas)": 2847,
+        "Selección abreviada subasta inversa": 2643,
+        "Selección Abreviada de Menor Cuantía": 1812,
+        "Licitación pública": 487,
+        "Concurso de méritos abierto": 335,
+        "Licitación pública Obra Publica": 194,
+        "No Definido": 62,
+        "Seleccion Abreviada Menor Cuantia Sin Manifestacion Interes": 34,
+        "Enajenación de bienes con subasta": 8,
+        "Enajenación de bienes con sobre cerrado": 3
+      },
+      "pct_vacios": 0.0,
+      "pct_nulos_disfrazados": 0.02
+    },
+    "justificacion_modalidad_de": {
+      "tipo_perfil": "cat",
+      "vacios": 0,
+      "nulos_disfrazados": 43,
+      "distintos": 36,
+      "frecuencias": {
+        "Servicios profesionales y apoyo a la gestión": 226077,
+        "Regla aplicable": 16328,
+        "Presupuesto inferior al 10% de la menor cuantía": 15759,
+        "Decreto 092 de 2017": 7458,
+        "Contratos o convenios Interadministrativos (valor cero)": 7041,
+        "Contratos o convenios Interadministrativos (con valor)": 5436,
+        "Arrendamiento de inmuebles": 3214,
+        "Suministro de bienes y servicios de características técnicas uniformes y común utilización": 2643,
+        "No existe pluralidad de oferentes en el mercado": 1694,
+        "Presupuesto menor al 10% de la Menor Cuantía": 1607,
+        "Ley 1150 de 2007": 813,
+        "Law2166of2021_Article95_SolidarityAgreements": 799,
+        "Prestamo de uso": 684,
+        "Urgencia manifiesta": 357,
+        "Contratos para el desarrollo de actividades científicas y tecnológicas": 272,
+        "Convenios Solidarios Regimen articulo 92 Ley 2166 de 2021": 199,
+        "Article30_1993": 194,
+        "Prestación de servicios de salud": 171,
+        "Law1150of2007_Article2_4_Numeral4_LiteralO": 141,
+        "Ejecución de trabajos artísticos": 129,
+        "Contratos de bienes y servicios sujetos a reserva": 108,
+        "Operaciones de Crédito Público": 48,
+        "Proceso de licitación pública declarado desierto": 44,
+        "Adquisición de inmuebles": 43,
+        "No Definido": 43
+      },
+      "pct_vacios": 0.0,
+      "pct_nulos_disfrazados": 0.01
+    },
+    "fecha_de_firma": {
+      "tipo_perfil": "fecha",
+      "vacios": 0,
+      "min": "2024-01-01T00:00:00.000",
+      "max": "2026-10-17T00:00:00.000",
+      "pct_vacios": 0.0
+    },
+    "fecha_de_inicio_del_contrato": {
+      "tipo_perfil": "fecha",
+      "vacios": 2625,
+      "min": "2017-10-19T00:00:00.000",
+      "max": "2035-11-07T00:00:00.000",
+      "anteriores_a_2000": 0,
+      "pct_vacios": 0.9
+    },
+    "fecha_de_fin_del_contrato": {
+      "tipo_perfil": "fecha",
+      "vacios": 1,
+      "min": "2012-01-31T00:00:00.000",
+      "max": "2925-12-31T00:00:00.000",
+      "anteriores_a_2000": 0,
+      "pct_vacios": 0.0
+    },
+    "tipodocproveedor": {
+      "tipo_perfil": "cat",
+      "vacios": 0,
+      "nulos_disfrazados": 396,
+      "distintos": 10,
+      "frecuencias": {
+        "Cédula de Ciudadanía": 235432,
+        "NIT": 54656,
+        "Otro": 420,
+        "No Definido": 396,
+        "Cédula de Extranjería": 339,
+        "Permiso por Protección Temporal": 135,
+        "Pasaporte": 15,
+        "Tarjeta de Identidad": 6,
+        "Registro Civil": 4,
+        "Permiso especial de permanencia": 3
+      },
+      "pct_vacios": 0.0,
+      "pct_nulos_disfrazados": 0.14
+    },
+    "documento_proveedor": {
+      "tipo_perfil": "texto",
+      "vacios": 0,
+      "nulos_disfrazados": 552,
+      "distintos": 82859,
+      "pct_vacios": 0.0,
+      "pct_nulos_disfrazados": 0.19
+    },
+    "proveedor_adjudicado": {
+      "tipo_perfil": "texto",
+      "vacios": 0,
+      "nulos_disfrazados": 76,
+      "distintos": 82451,
+      "pct_vacios": 0.0,
+      "pct_nulos_disfrazados": 0.03
+    },
+    "es_pyme": {
+      "tipo_perfil": "cat",
+      "vacios": 0,
+      "nulos_disfrazados": 0,
+      "distintos": 2,
+      "frecuencias": {
+        "No": 255853,
+        "Si": 35553
+      },
+      "pct_vacios": 0.0,
+      "pct_nulos_disfrazados": 0.0
+    },
+    "valor_del_contrato": {
+      "tipo_perfil": "num",
+      "vacios": 0,
+      "distintos": 93074,
+      "min": "0",
+      "max": "1159397606948",
+      "ceros": 2804,
+      "negativos": 0,
+      "pct_vacios": 0.0
+    },
+    "dias_adicionados": {
+      "tipo_perfil": "num",
+      "vacios": 0,
+      "distintos": 453,
+      "min": "0",
+      "max": "730546",
+      "ceros": 249772,
+      "negativos": 0,
+      "pct_vacios": 0.0
+    },
+    "urlproceso": {
+      "tipo_perfil": "url",
+      "vacios": 0,
+      "pct_vacios": 0.0
+    }
+  }
+}

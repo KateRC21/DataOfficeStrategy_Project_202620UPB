@@ -1,0 +1,10 @@
+﻿KPI,meta,resultado
+Calidad por lote,≥ 95 %,99.66 %
+Protección de PII (campos en claro en consumo),0,0
+Cobertura de riesgo (contratos con score),100 %,100.0 %
+Activos con Owner y Steward,100 %,100 %
+Columnas del mart en el diccionario,100 %,100 %
+Columnas del mart en el estándar de nombres,100 %,100 %
+Eslabones de linaje verificados por SHA-256,100 %,100 %
+Frescura (horas lote raw → mart),≤ 24 h,1.1
+Corridas automáticas registradas,≥ 1,2

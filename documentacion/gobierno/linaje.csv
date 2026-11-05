@@ -1,0 +1,8 @@
+﻿paso,nodo,tipo,transformacion,artefacto,sha256_ok
+1,API SODA jbjy-vk9h,fuente,SoQL: departamento='Antioquia' AND fecha_de_firma >= '2024-01-01',https://www.datos.gov.co/resource/jbjy-vk9h.json,
+2,raw DS-01,dataset,"descargar_fuentes.py (paginado, todo texto)",DS-01_secop2_contratos_20261105.parquet,True
+2,raw DS-02,dataset,descargar_fuentes.py,DS-02_secop2_procesos_20261105.parquet,True
+3,curated DS-01,dataset,"limpieza.py: nulos, tipos, NIT, entidad, DIVIPOLA, calidad, HMAC, enmascarado",DS-01_contratos_curated.parquet,True
+4,mart,dataset,riesgo.py + reglas v1.0.0,mart_*.parquet,True
+5,dashboard,consumo,"dashboard/app.py (lee solo mart, filtra por rol)",streamlit run dashboard/app.py,
+5,alertas,consumo,notificar_alertas.py → Power Automate,automatizacion/alertas/,

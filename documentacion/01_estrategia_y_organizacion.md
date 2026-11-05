@@ -227,7 +227,9 @@ flowchart LR
 | **Oficial de Protección de Datos Personales** | Asesor del Comité | Verifica cumplimiento de la Ley 1581 (finalidad, circulación restringida, seguridad) y aprueba la política de seudonimización | Seguridad |
 | **Consumidor** (auditor) | Spoke | Usa alertas y tablero; registra si la alerta fue pertinente | — |
 
-### 6.5 RACI preliminar (se completa en el Plan de Gobierno, Entrega 2)
+### 6.5 RACI preliminar (organizacional)
+
+> Este es el RACI **de la contraloría**. El RACI **del equipo del proyecto** (4 roles de gobierno, 18 tareas, validado con la regla de oro) está en [05 §3](05_plan_gobierno_datos.md#3-matriz-raci).
 
 R = Responsable (ejecuta) · A = Aprueba (rinde cuentas) · C = Consultado · I = Informado
 
@@ -272,6 +274,8 @@ Los tres integrantes hacen commits en todos los componentes. Los roles indican q
 | Calidad | Nivel 1: se corrige a mano cuando se nota | Nivel 3: reglas medidas por lote con umbral |
 | Metadatos y linaje | Nivel 1: no existen | Nivel 3: catálogo y linaje por lote |
 | Analítica | Nivel 1–2: consultas ad hoc | Nivel 3: score de riesgo y tablero recurrente |
+
+El diagnóstico cuantitativo con el instrumento de la Sesión 1 (8 afirmaciones, /16) está en [05 §1](05_plan_gobierno_datos.md#1-diagnóstico-de-madurez): AS-IS **2/16** (Inicial) → hoy **8/16** (Definido, todo en *Parcial*) → meta **13/16** (Gestionado). Esa meta mide el gobierno de los activos del proyecto; la de esta tabla, a la organización.
 
 ## 7. Riesgos y supuestos
 
