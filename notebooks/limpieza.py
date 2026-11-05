@@ -224,6 +224,13 @@ def pii_en_claro(curado: pd.DataFrame, sens: set) -> int:
     return int(sum(curado[c].isin(sens).sum() for c in columnas))
 
 
+def _relativa(ruta: str) -> str:
+    """Ruta del lote de origen relativa a la raíz del repositorio (el manifiesto no expone rutas locales)."""
+    real = Path(sorted(glob.glob(ruta))[-1] if "*" in ruta else ruta).resolve()
+    raiz = Path(__file__).resolve().parents[1]
+    return real.relative_to(raiz).as_posix() if real.is_relative_to(raiz) else real.name
+
+
 def procesar(contratos: str, divipola: str, salida: str, reporte: str, corte: str | None = None) -> dict:
     inicio = datetime.now(timezone.utc)
     corte_ts = pd.Timestamp(corte) if corte else pd.Timestamp.now().normalize()
@@ -268,7 +275,7 @@ def procesar(contratos: str, divipola: str, salida: str, reporte: str, corte: st
     cur.to_parquet(ruta, index=False)
     tabla.to_csv(reporte / "reporte_calidad_DS-01.csv", index=False, encoding="utf-8")
     manifiesto = {
-        "capa": "curated", "origen": str(contratos), "origen_filas": len(crudo), "filas_curated": len(cur),
+        "capa": "curated", "origen": _relativa(contratos), "origen_filas": len(crudo), "filas_curated": len(cur),
         "columnas_origen": crudo.shape[1], "columnas_curated": cur.shape[1],
         "inicio_utc": inicio.isoformat(timespec="seconds"), "fin_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "corte": str(corte_ts.date()), "calidad": resumen, "duplicados_eliminados": duplicados,

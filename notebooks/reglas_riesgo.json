@@ -1,0 +1,36 @@
+{
+  "version": "1.0.0",
+  "vigente_desde": "2026-11-04",
+  "aprobada_por": "Data Owner (Luis Ángel Seoanes Ovieso) · propuesta del Data Steward (Julian Amariles Taborda)",
+  "nota": "Las banderas priorizan la revisión; no prueban irregularidad. Cambiar un peso o umbral exige subir la versión (AD-4 y mejora M6 del BPMN).",
+  "niveles": {"alto": 40, "medio": 25},
+  "banderas": {
+    "R1": {"nombre": "Contratación directa", "pregunta": "P1", "peso": 10,
+           "regla": "La modalidad empieza por 'Contratación directa' (con o sin ofertas)."},
+    "R2": {"nombre": "Firma directa en ventana atípica", "pregunta": "P2", "peso": 15,
+           "regla": "Contratación directa firmada en una ventana atípica: el mes previo a la restricción de la Ley de Garantías o la segunda quincena de diciembre (fin de vigencia).",
+           "ventanas": [
+             {"nombre": "Antes de la Ley de Garantías 2026", "desde": "2026-01-01", "hasta": "2026-01-30"},
+             {"nombre": "Fin de vigencia 2024", "desde": "2024-12-15", "hasta": "2024-12-31"},
+             {"nombre": "Fin de vigencia 2025", "desde": "2025-12-15", "hasta": "2025-12-31"}
+           ]},
+    "R3": {"nombre": "Concentración entidad–proveedor", "pregunta": "P3", "peso": 15,
+           "regla": "El par entidad–proveedor tiene al menos 3 contratos y concentra ≥ 20 % del valor de una entidad con ≥ 30 contratos, o ≥ 10 % de los contratos de una entidad con ≥ 100 contratos.",
+           "min_contratos_par": 3, "pct_valor": 0.20, "min_contratos_entidad_valor": 30,
+           "pct_contratos": 0.10, "min_contratos_entidad_conteo": 100},
+    "R4": {"nombre": "Persona natural en varias entidades a la vez", "pregunta": "P4", "peso": 10,
+           "regla": "El contratista es persona natural y en algún mes de ejecución del contrato tiene contratos vigentes con ≥ 3 entidades distintas (se compara por seudónimo, nunca por cédula).",
+           "min_entidades": 3, "max_meses_por_contrato": 36},
+    "R5": {"nombre": "Valor atípico para su tipo y modalidad", "pregunta": "P5", "peso": 15,
+           "regla": "log10(valor) supera Q3 + 1,5·IQR de su grupo tipo de contrato × modalidad (grupos con ≥ 30 contratos con valor > 0).",
+           "min_grupo": 30, "k_iqr": 1.5},
+    "R6": {"nombre": "Proceso competitivo con un único oferente", "pregunta": "P6", "peso": 15,
+           "regla": "Modalidad competitiva (licitación, selección abreviada, concurso, mínima cuantía o con ofertas) y el proceso de DS-02 recibió exactamente 1 respuesta."},
+    "R7": {"nombre": "Urgencia manifiesta", "pregunta": "P1", "peso": 10,
+           "regla": "La causal de la modalidad menciona urgencia manifiesta (contratación directa excepcional sin planeación)."},
+    "R8": {"nombre": "Prórroga desproporcionada", "pregunta": "P5", "peso": 5,
+           "regla": "Días adicionados ≥ 60 y ≥ 50 % del plazo pactado (inicio→fin)."},
+    "R9": {"nombre": "Inconsistencia del dato", "pregunta": "Calidad", "peso": 5,
+           "regla": "Valor $0 sin causal de valor cero, o fecha de fin anterior a la de inicio. Señal de calidad: el contrato merece verificación documental."}
+  }
+}
