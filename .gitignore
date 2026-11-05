@@ -4,6 +4,10 @@ data/curated/*
 data/mart/*
 !data/**/.gitkeep
 
+# Alertas de riesgo: información reservada del control fiscal (Plan de Gobierno §7). Solo se versiona el registro de corridas.
+automatizacion/alertas/*
+!automatizacion/alertas/.gitkeep
+
 # Python / Jupyter
 __pycache__/
 *.pyc

@@ -1,0 +1,3 @@
+inicio_utc,duracion_s,lote_ds01,filas_raw,filas_curated,calidad_pct,decision_gate,pii_en_claro_curated,pii_en_claro_mart,alertas_alto,banderas_reglas_version,purgados,estado,detalle
+2026-11-05T04:00:27+00:00,94.6,DS-01_secop2_contratos_20261105.parquet,294409,294409,99.66,PUBLICAR,0,0,1948,1.0.0,0 archivos (simulado),OK,1948 alertas -> automatizacion\alertas\alertas_2026-11-05.csv
+2026-11-05T04:08:15+00:00,80.1,DS-01_secop2_contratos_20261105.parquet,294409,294409,99.66,PUBLICAR,0,0,1948,1.0.0,0 archivos (simulado),OK,1948 alertas -> automatizacion\alertas\alertas_2026-11-05.csv
